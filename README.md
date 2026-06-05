@@ -34,7 +34,7 @@ FEEDBACK_NOW_TOKEN=ghp_xxx
 FEEDBACK_NOW_REPO=owner/repo        # GitLab: the numeric project id
 ```
 
-On GitHub the token must be a **classic** personal access token with the `repo` scope; give it an expiry that matches the job (6 months, or just the testing window). On GitLab, use an `api`-scoped token. See the [documentation](https://hexters.github.io/feedback-now/) for everything else.
+On GitHub the token must be a **classic** personal access token with the `repo` scope; give it an expiry that matches the job (6 months, or just the testing window). On GitLab, create a **personal access token** with the **`api`** scope (User Settings → Access Tokens). See the [documentation](https://hexters.github.io/feedback-now/) for everything else.
 
 ## License
 

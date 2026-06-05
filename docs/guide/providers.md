@@ -31,7 +31,9 @@ FEEDBACK_NOW_REPO=12345                 # the numeric project id
 # FEEDBACK_NOW_GITLAB_HOST=https://gitlab.example.com   # self-hosted only
 ```
 
-Use a personal access token with the `api` scope, and set an expiry the same way. `FEEDBACK_NOW_REPO` is the **numeric project id** (shown on the project's home page).
+Create a **personal access token** with the **`api`** scope under **User Settings → Access Tokens → Add new token**. `api` is the broad read/write scope the package needs to open issues and upload screenshots — the narrower `read_api` is not enough. Set an expiry that matches the work, the same as on GitHub.
+
+`FEEDBACK_NOW_REPO` is the **numeric project id** (shown on the project's home page, under the title).
 
 GitLab has a proper upload API, so screenshots are uploaded and linked without touching your code.
 
