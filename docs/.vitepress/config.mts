@@ -11,7 +11,7 @@ export default defineConfig({
   base: '/feedback-now/',
   cleanUrls: true,
   lastUpdated: true,
-  sitemap: { hostname: site },
+  sitemap: { hostname: site + '/' },
 
   // Canonical URL on every page (SEO / duplicate-content).
   transformPageData(pageData) {
