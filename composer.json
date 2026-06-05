@@ -1,7 +1,7 @@
 {
     "name": "hexters/feedback-now",
-    "description": "A floating Report Issue button for Laravel that files the issue straight to your GitHub or GitLab repository, with screenshot support.",
-    "keywords": ["laravel", "feedback", "issue", "bug report", "github", "gitlab", "fab"],
+    "description": "In-app feedback and bug reporting for Laravel: a floating button that turns client reports with annotated screenshots into GitHub or GitLab issues.",
+    "keywords": ["laravel", "php", "feedback", "in-app-feedback", "bug-report", "bug-tracker", "issue-tracker", "report-issue", "github", "github-issues", "gitlab", "screenshot", "annotation", "fab"],
     "license": "MIT",
     "authors": [
         {

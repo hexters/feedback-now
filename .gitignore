@@ -3,6 +3,9 @@ composer.lock
 .phpunit.result.cache
 /.phpunit.cache/
 /node_modules/
+package-lock.json
+/docs/.vitepress/dist/
+/docs/.vitepress/cache/
 /build/
 .DS_Store
 .idea/

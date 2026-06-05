@@ -3,11 +3,15 @@
 # Keep production installs lean: exclude everything not needed at runtime
 # from the Composer dist archive.
 /art               export-ignore
+/docs              export-ignore
 /tests             export-ignore
 /.github           export-ignore
 .gitattributes     export-ignore
 .gitignore         export-ignore
 .editorconfig      export-ignore
+package.json       export-ignore
+package-lock.json  export-ignore
+postcss.config.mjs export-ignore
 phpunit.xml        export-ignore
 .phpunit.result.cache export-ignore
 composer.lock      export-ignore

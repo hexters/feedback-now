@@ -1,0 +1,66 @@
+/* ----------------------------------------------------------------------------
+   Feedback Now for Laravel — VitePress theme overrides
+---------------------------------------------------------------------------- */
+
+:root {
+  --vp-c-brand-1: #2f6fed;
+  --vp-c-brand-2: #2861d8;
+  --vp-c-brand-3: #1f57c4;
+  --vp-c-brand-soft: rgba(47, 111, 237, 0.14);
+
+  --vp-font-family-base: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --vp-home-hero-name-color: var(--vp-c-brand-1);
+
+  /* landing tokens */
+  --fn-ink: #14171f;
+  --fn-muted: #5b6472;
+  --fn-bg: #faf9f6;
+  --fn-card: #ffffff;
+  --fn-line: #e9e6de;
+  --fn-accent: #2f6fed;
+  --fn-info: #2f6fed;
+  --fn-success: #16a34a;
+  --fn-warning: #f59e0b;
+  --fn-danger: #dc2626;
+  --fn-code: #14171f;
+}
+
+/* Distinctive display face for headings and brand */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.VPNavBarTitle .title {
+  font-family: var(--vp-font-family-base);
+  letter-spacing: -0.015em;
+}
+
+.vp-doc h1 { font-weight: 800; }
+.vp-doc h2 { padding-top: 22px; border-top: 1px solid var(--vp-c-divider); }
+
+.vp-doc div[class*='language-'] {
+  border-radius: 14px;
+  box-shadow: 0 14px 30px -18px rgba(20, 23, 31, 0.4);
+}
+
+.vp-doc :not(pre) > code { font-size: 0.85em; }
+
+.VPButton.brand { font-weight: 700; }
+
+/* ----------------------------------------------------------------------------
+   Landing page — make the `layout: page` index full-bleed
+---------------------------------------------------------------------------- */
+
+.VPPage { padding: 0 !important; }
+
+.fn-landing {
+  font-family: var(--vp-font-family-base);
+}
+
+.fn-landing :where(h1, h2, h3) {
+  font-family: var(--vp-font-family-base);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0;
+}
