@@ -27,6 +27,7 @@ class InjectFeedbackButton
         $widget = view('feedback-now::widget', [
             'endpoint' => url(config('feedback-now.route_prefix', 'feedback-now')),
             'csrf'     => csrf_token(),
+            'accent'   => config('feedback-now.accent', '#2f6fed'),
             'button'   => config('feedback-now.button'),
             'maxKb'    => (int) config('feedback-now.max_screenshot_kb', 5120),
         ])->render();
@@ -40,6 +41,12 @@ class InjectFeedbackButton
     protected function injectable(Request $request, BaseResponse $response): bool
     {
         if ($request->ajax() || $request->wantsJson() || $request->pjax()) {
+            return false;
+        }
+
+        // Pages the button is told to stay off (supports wildcards).
+        $except = array_filter((array) config('feedback-now.except', []));
+        if ($except && $request->is(...$except)) {
             return false;
         }
 

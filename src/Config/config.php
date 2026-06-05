@@ -37,11 +37,29 @@ return [
     'screenshot_path'   => 'feedback-screenshots',
     'screenshot_branch' => null, // null = the default branch
 
+    // Primary accent — the floating button, the primary actions (Send, Save),
+    // focus rings, and links all pick this up.
+    'accent' => env('FEEDBACK_NOW_ACCENT', '#2f6fed'),
+
     // Button look.
     'button' => [
-        'label'    => 'Report issue',
-        'position' => 'bottom-right', // bottom-right | bottom-left
-        'color'    => '#2f6fed',
+        'label' => 'Report issue',
+
+        // One of eight spots around the screen:
+        //   top-left      top-center      top-right
+        //   middle-left                   middle-right
+        //   bottom-left   bottom-center   bottom-right
+        'position' => 'bottom-right',
+
+        // Optional: override just the floating button's color. Defaults to accent.
+        'color' => null,
+    ],
+
+    // Paths where the button should NOT appear. Supports wildcards, matched
+    // with Request::is(), e.g. 'admin', 'admin/*', 'checkout/*'.
+    'except' => [
+        // 'admin/*',
+        // 'login',
     ],
 
     'title_prefix'      => '[Feedback]',

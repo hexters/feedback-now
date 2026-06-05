@@ -35,10 +35,19 @@ return [
     'screenshot_path'   => 'feedback-screenshots',
     'screenshot_branch' => null, // null = the default branch
 
+    // Primary accent — button, primary actions, focus rings, links.
+    'accent' => env('FEEDBACK_NOW_ACCENT', '#2f6fed'),
+
     'button' => [
         'label'    => 'Report issue',
-        'position' => 'bottom-right', // bottom-right | bottom-left
-        'color'    => '#2f6fed',
+        'position' => 'bottom-right', // see the eight positions below
+        'color'    => null,           // overrides just the button; defaults to accent
+    ],
+
+    // Paths where the button should NOT appear (wildcards via Request::is).
+    'except' => [
+        // 'admin/*',
+        // 'login',
     ],
 
     'title_prefix'      => '[Feedback]',
@@ -51,7 +60,22 @@ return [
 
 ## Common tweaks
 
-- **Button look** — change `button.label`, `button.position`, and `button.color`.
+- **Button position** — `button.position` takes one of eight spots:
+
+  | | | |
+  |--|--|--|
+  | `top-left` | `top-center` | `top-right` |
+  | `middle-left` | | `middle-right` |
+  | `bottom-left` | `bottom-center` | `bottom-right` |
+
+- **Hide it on some pages** — list paths in `except`. Wildcards are matched with `Request::is()`:
+
+  ```php
+  'except' => ['admin', 'admin/*', 'checkout/*'],
+  ```
+
+- **Accent color** — set `accent` (or `FEEDBACK_NOW_ACCENT`) to recolor the button, primary actions, and focus rings in one place. Use `button.color` only if you want the floating button a different color from the accent.
+- **Button label** — change `button.label`.
 - **Issue labels** — edit `labels`, e.g. `['feedback', 'from-client']`.
 - **Title prefix** — every issue title starts with `title_prefix` (default `[Feedback]`).
 - **Screenshot location (GitHub)** — set `screenshot_path` and `screenshot_branch` to keep images off your default branch.

@@ -1,18 +1,30 @@
 @php
-    $pos = ($button['position'] ?? 'bottom-right') === 'bottom-left' ? 'left:22px' : 'right:22px';
-    $accent = $button['color'] ?? '#2f6fed';
+    $positions = [
+        'top-left'      => 'top:22px;left:22px',
+        'top-center'    => 'top:22px;left:50%;--fbn-tf:translateX(-50%)',
+        'top-right'     => 'top:22px;right:22px',
+        'middle-left'   => 'top:50%;left:22px;--fbn-tf:translateY(-50%)',
+        'middle-right'  => 'top:50%;right:22px;--fbn-tf:translateY(-50%)',
+        'bottom-left'   => 'bottom:22px;left:22px',
+        'bottom-center' => 'bottom:22px;left:50%;--fbn-tf:translateX(-50%)',
+        'bottom-right'  => 'bottom:22px;right:22px',
+    ];
+    $pos = $positions[$button['position'] ?? 'bottom-right'] ?? $positions['bottom-right'];
+    $accent = $accent ?? '#2f6fed';
+    $fab = $button['color'] ?? $accent;
     $label = $button['label'] ?? 'Report issue';
 @endphp
-<div id="fbn-root" style="--fbn-accent: {{ $accent }};"
+<div id="fbn-root" style="--fbn-accent: {{ $accent }}; --fbn-fab: {{ $fab }};"
      data-endpoint="{{ $endpoint }}" data-csrf="{{ $csrf }}" data-max="{{ $maxKb }}">
 
-    <button type="button" class="fbn-fab" style="{{ $pos }};bottom:22px" aria-label="{{ $label }}">
+    <button type="button" class="fbn-fab" style="{{ $pos }}" aria-label="{{ $label }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg>
         <span>{{ $label }}</span>
     </button>
 
     <div class="fbn-overlay" hidden>
         <div class="fbn-modal" role="dialog" aria-modal="true" aria-label="Report an issue">
+            <div class="fbn-grab" aria-hidden="true"></div>
             <div class="fbn-head">
                 <div>
                     <h2>Report an issue</h2>
@@ -50,6 +62,7 @@
 
     <div class="fbn-annot" hidden>
         <div class="fbn-annot-modal" role="dialog" aria-modal="true" aria-label="Mark up the screenshot">
+            <div class="fbn-grab" aria-hidden="true"></div>
             <div class="fbn-head">
                 <div>
                     <h2>Mark up the screenshot</h2>
@@ -105,12 +118,13 @@
 .fbn-fab {
     position: fixed; z-index: 2147483000; display: inline-flex; align-items: center; gap: 9px;
     height: 48px; padding: 0 18px 0 15px; border: 0; border-radius: 999px; cursor: pointer;
-    background: var(--fbn-accent); color: #fff; font-size: 14px; font-weight: 600;
-    box-shadow: 0 10px 26px -8px color-mix(in srgb, var(--fbn-accent) 70%, transparent);
-    transition: transform .12s ease, filter .15s;
+    background: var(--fbn-fab, var(--fbn-accent)); color: #fff; font-size: 14px; font-weight: 600;
+    box-shadow: 0 10px 26px -8px color-mix(in srgb, var(--fbn-fab, var(--fbn-accent)) 70%, transparent);
+    transform: var(--fbn-tf, none);
+    transition: filter .15s;
 }
 .fbn-fab:hover { filter: brightness(1.07); }
-.fbn-fab:active { transform: translateY(1px); }
+.fbn-fab:active { transform: var(--fbn-tf, none) translateY(1px); }
 .fbn-fab svg { width: 19px; height: 19px; }
 .fbn-overlay, .fbn-annot {
     position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
@@ -123,10 +137,13 @@
     width: 100%; max-height: 92vh; overflow-y: auto; background: #fff; color: #0f1729;
     border-radius: 18px; box-shadow: 0 30px 70px -20px rgba(0,0,0,.5);
     animation: fbn-pop .22s cubic-bezier(.22,1,.36,1);
+    overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
 }
 .fbn-modal { max-width: 440px; }
 .fbn-annot-modal { max-width: 560px; }
 @keyframes fbn-pop { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes fbn-sheet { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.fbn-grab { display: none; }
 .fbn-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 18px 20px 12px; }
 .fbn-head h2 { margin: 0; font-size: 17px; font-weight: 700; }
 .fbn-head p { margin: 2px 0 0; font-size: 12.5px; color: #64748b; }
@@ -201,6 +218,22 @@
     .fbn-annot-side .fbn-notes { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 18px; }
     .fbn-annot-side .fbn-foot { border-top: 1px solid #f1f5f9; }
 }
+@media (max-width: 640px) {
+    /* a real bottom sheet: docked to the bottom edge, grab handle, slides up */
+    .fbn-overlay, .fbn-annot { padding: 0; align-items: flex-end; }
+    .fbn-modal, .fbn-annot-modal { max-width: 100%; max-height: 92vh; border-radius: 22px 22px 0 0; animation: fbn-sheet .3s cubic-bezier(.22,1,.36,1); }
+    .fbn-grab { display: block; width: 40px; height: 4px; border-radius: 99px; background: #d8d4ca; margin: 9px auto 0; flex: none; }
+    .fbn-grab, .fbn-head { touch-action: none; cursor: grab; }
+    /* 16px inputs stop iOS from zooming in on focus */
+    .fbn-in, .fbn-ta, .fbn-note-text, .fbn-pop-text { font-size: 16px; }
+    /* keep Cancel/Send reachable while the body scrolls */
+    .fbn-foot { position: sticky; bottom: 0; background: #fff; border-top: 1px solid #eef2f7; }
+    /* keep the note popover inside narrow screens */
+    .fbn-pop { width: min(232px, 84vw); }
+    /* a touch more room for the drawing */
+    .fbn-canvas-wrap img { max-height: 48vh; }
+    .fbn-tools { justify-content: center; gap: 16px; }
+}
 @media (max-width: 480px) { .fbn-fab span { display: none; } .fbn-fab { padding: 0; width: 48px; justify-content: center; } }
 </style>
 
@@ -258,13 +291,33 @@
     var current = null, snap = null, curColor = 'danger';
     var popStroke = null;
 
+    /* lock the page behind the sheet so scrolling stays inside the modal */
+    var scrollY = 0;
+    function lockScroll() {
+        scrollY = window.scrollY || window.pageYOffset || 0;
+        var b = document.body;
+        b.style.position = 'fixed';
+        b.style.top = -scrollY + 'px';
+        b.style.left = '0';
+        b.style.right = '0';
+        b.style.width = '100%';
+        b.style.overflow = 'hidden';
+    }
+    function unlockScroll() {
+        var b = document.body;
+        b.style.position = ''; b.style.top = ''; b.style.left = '';
+        b.style.right = ''; b.style.width = ''; b.style.overflow = '';
+        window.scrollTo(0, scrollY);
+    }
+
     /* ---------- main modal ---------- */
     function open() {
         urlIn.value = window.location.pathname + window.location.search + window.location.hash;
         overlay.hidden = false;
+        lockScroll();
         setTimeout(function () { descIn.focus(); }, 50);
     }
-    function close() { overlay.hidden = true; }
+    function close() { overlay.hidden = true; unlockScroll(); }
 
     function setMsg(text, type) {
         if (!text) { msg.hidden = true; return; }
@@ -483,6 +536,30 @@
             img.src = s.url;
         });
     }
+
+    /* drag the handle/header down to dismiss, like a native bottom sheet */
+    function makeSheet(modal, onDismiss) {
+        var startY = 0, dy = 0, dragging = false;
+        var isMobile = function () { return window.matchMedia('(max-width: 640px)').matches; };
+        modal.addEventListener('pointerdown', function (e) {
+            if (!isMobile() || !e.target.closest('.fbn-grab, .fbn-head')) return;
+            dragging = true; startY = e.clientY; dy = 0; modal.style.transition = 'none';
+        });
+        window.addEventListener('pointermove', function (e) {
+            if (!dragging) return;
+            dy = Math.max(0, e.clientY - startY);
+            modal.style.transform = 'translateY(' + dy + 'px)';
+        });
+        window.addEventListener('pointerup', function () {
+            if (!dragging) return;
+            dragging = false;
+            modal.style.transition = 'transform .25s cubic-bezier(.22,1,.36,1)';
+            modal.style.transform = '';
+            if (dy > 110) onDismiss();
+        });
+    }
+    makeSheet($('.fbn-modal'), close);
+    makeSheet($('.fbn-annot-modal'), cancelAnnot);
 
     /* ---------- wiring ---------- */
     fab.addEventListener('click', open);
